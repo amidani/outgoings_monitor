@@ -1,10 +1,12 @@
-var serverAddress = "http://localhost:8080/omsrv";
+var serverAddress = "/omsrv/";
+var rootAddress   = "http://localhost:8080/omsrv";
 
 App.controller('EarningsCtrl', function EarningsCtrl($scope, $http, persistencejs, persistenceREST){
 	//Init
-	$scope.earnings =  [{id:"400", label:"hgjgjg", amount:231}];
+	$scope.earnings =  [];
 	//Load data from WS REST...
 	this.loadEarnings = function(){
+		$scope.errMsgEarning = '';
 		var url = serverAddress+"earnings/all";
 		$http({method: 'GET', url: url}).
 	      success(function(data, status) {
@@ -19,6 +21,10 @@ App.controller('EarningsCtrl', function EarningsCtrl($scope, $http, persistencej
 	};
 	this.loadEarnings();
 	$scope.addEarning = function (){
+		if($scope.label=='' || $scope.amount==null){
+			$scope.errMsgEarning = 'Please make sure you fill all required inputs!';
+			return;
+		}
     	//persistenceREST.addEarning($scope.label, $scope.amount);
 		var url = serverAddress+"earnings/add/"+$scope.label+"/"+$scope.amount;
 		$http({method: 'PUT', url: url}).
@@ -27,15 +33,31 @@ App.controller('EarningsCtrl', function EarningsCtrl($scope, $http, persistencej
 	    	  $scope.earnings.push({id:data, label:$scope.label, amount:$scope.amount});
 	    	  $scope.label="";
 	      	  $scope.amount=null;
+	      	  $scope.errMsgEarning = '';
 	      }).
 	      error(function(data, status) {
 	    	  console.log("Request failed [Status : "+status+"]");
+	    	  $scope.errMsgEarning = 'Service is unavailable for the moment.';
 	      });
     };
     
     $scope.removeEarning = function (earning){
-    	persistenceREST.removeEarning(earning.id);
-    	$scope.earnings.splice($scope.earnings.indexOf(earning), 1);
+    	//persistenceREST.removeEarning(earning.id);
+    	var url = serverAddress+"earnings/delete/"+earning.id;
+		$http({method: 'DELETE', url: url}).
+	      success(function(data, status) {
+	    	  if(data){
+	    		  console.log("Earning deleted successfuly.");
+	    		  $scope.earnings.splice($scope.earnings.indexOf(earning), 1);
+	    		  $scope.errMsgEarning = '';
+	    	  }else{
+	    		  $scope.errMsgEarning = 'Unable to delete earning with id['+earning.id+'].';
+	    	  }  
+	      }).
+	      error(function(data, status) {
+	    	  console.log("Request failed [Status : "+status+"]");
+	    	  $scope.errMsgEarning = 'Service is unavailable for the moment.';
+	      });
     };
     
     $scope.getTotalEarnings = function (){

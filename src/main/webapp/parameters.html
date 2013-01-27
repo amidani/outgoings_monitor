@@ -53,7 +53,11 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="earn">
 				<div class="row" style="margin-left:30px;">
-			    	<div ng-controller="EarningsCtrl" class="span6">
+			    	<div ng-controller="EarningsCtrl" class="span7">
+			    		<div ng-show="errMsgEarning != ''" class="alert alert-error">
+			    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+							<strong>Attention!</strong>{{errMsgEarning}}
+						</div>
 				     	<form class="form-inline">
 					      	<label><b>Label</b></label>
 					      	<input type="text" ng-model="label" placeholder="Enter a label here"/>
@@ -67,7 +71,7 @@
 					  			<thead><tr><th colspan="3">Earnings</th></tr></thead>
 					  			<tbody>
 					  			<tr ng-repeat="earning in earnings"><td>{{earning.label}}</td><td>{{earning.amount}}&euro;</td>
-					  			<td><a href="#" ng:click="removeEarning(earning)"><i class="icon-trash"></i>&nbsp;</a></td></tr>
+					  			<td><a href="#" ng:click="removeEarning(earning)"><i class="icon-trash"></i></a></td></tr>
 					  			<tr><td>&nbsp;</td><th colspan="2" style="color: green;">Total : {{getTotalEarnings()}}&euro;</th></tr>
 					  			</tbody>
 					  		</table>
@@ -77,7 +81,7 @@
 			</div>
 			<div class="tab-pane" id="outg">
 				<div class="row" style="margin-left:30px;">
-					<div ng-controller="OutgoingsCtrl" class="span6">
+					<div ng-controller="OutgoingsCtrl" class="span8">
 				     	<form class="form-inline">
 					      	<label><b>Label</b></label>
 					      	<input type="text" ng-model="label" placeholder="Enter a label here"/>
@@ -99,7 +103,7 @@
 				  			<tr ng-repeat="outgoing in outgoings | filter:{type:'M'}">
 				  				<td>{{outgoing.label}}</td>
 				  				<td>{{outgoing.amount}}&euro;</td>
-				  				<td><span class="row-destroy" ng:click="removeOutgoing(outgoing)"></span></td></tr>
+				  				<td><a href="#" ng:click="removeOutgoing(outgoing)"><i class="icon-trash"></i></a></td></tr>
 				  			<tr><td>&nbsp;</td><th colspan="2" style="color: green;">Total : {{getTotalMonthlyOutgoings()}}&euro;</th></tr>
 				  			</tbody>
 				  		</table>
