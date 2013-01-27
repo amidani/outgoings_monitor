@@ -1,4 +1,4 @@
 earnings_monitor
 ================
 
-AngularJS width bootstrap application using persistencejs for WebSQL persistence and RESTful WS with Spring MVC 3, Objectify 4  
+AngularJS with bootstrap application using persistencejs for WebSQL persistence and RESTful WS with Spring MVC 3, Objectify 4  
